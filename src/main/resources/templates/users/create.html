@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create User</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 400px;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    button,
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover,
+    input[type="submit"]:hover {
+      background: #0056b3;
+    }
+    .error {
+      color: red;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<form th:action="@{/logout}" th:method="POST">
+  <input type="submit" value="Logout"/>
+</form>
+
+<form th:action="@{/admin/}" th:object="${user}" method="POST">
+  <label for="name">Name</label>
+  <input type="text" id="name" th:field="*{name}" required>
+  <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error">Name error</div>
+
+  <label for="lastName">Last Name</label>
+  <input type="text" id="lastName" th:field="*{lastName}" required>
+  <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error">Last Name error</div>
+
+  <label for="password">Password</label>
+  <input type="text" id="password" th:field="*{password}" required>
+  <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error">Password error</div>
+
+  <th:block th:each="role: ${listRole}">
+    <input type="checkbox" th:field="*{roles}" th:value="${role.id}" th:id="'role_' + ${role.id}"/>
+    <label th:for="'role_' + ${role.id}" th:text="${role.name}"></label>
+    <br/>
+  </th:block>
+
+  <button type="submit">Create User</button>
+</form>
+</body>
+</html>
